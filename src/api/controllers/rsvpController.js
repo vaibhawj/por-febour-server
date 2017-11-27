@@ -2,15 +2,12 @@ import axios from 'axios';
 import CircularJSON from 'circular-json';
 
 const couchDbUrl = process.env.couchUrl;
-const auth = {
-    username: process.env.couchUser,
-    password: process.env.couchPassword
-}
 
 const getRsvp = async (phone) => {
     let oldRsvpPromise = await axios.get(`${couchDbUrl}/${phone}`, {
         headers: {
-            ...auth
+            username: process.env.couchUser,
+            password: process.env.couchPassword
         }
     })
         .then((response) => {
@@ -39,7 +36,8 @@ export const submitRsvp = async (req, res) => {
             "lastSaved": new Date().toString()
         }, {
             headers: {
-                ...auth
+                username: process.env.couchUser,
+                password: process.env.couchPassword
             }
         }).then((response) => {
             res.status(200).send('Saved successfully!');
@@ -60,7 +58,8 @@ export const submitRsvp = async (req, res) => {
             "lastSaved": new Date().toString()
         }, {
             headers: {
-                ...auth
+                username: process.env.couchUser,
+                password: process.env.couchPassword
             }
         })
             .then((response) => {
@@ -71,4 +70,3 @@ export const submitRsvp = async (req, res) => {
             })
     }
 }
-

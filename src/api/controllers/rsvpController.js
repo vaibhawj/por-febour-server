@@ -2,14 +2,11 @@ import axios from 'axios';
 import CircularJSON from 'circular-json';
 
 const couchDbUrl = process.env.couchUrl;
+const AuthStr = 'Basic YXBwVXNlcjo3ODk2M1JyLjQ1MjA=';
 
 const getRsvp = async (phone) => {
-    let oldRsvpPromise = await axios.get(`${couchDbUrl}/${phone}`, {
-        headers: {
-            username: process.env.couchUser,
-            password: process.env.couchPassword
-        }
-    })
+    let oldRsvpPromise = await axios.get(`${couchDbUrl}/${phone}`,
+        { headers: { Authorization: AuthStr } })
         .then((response) => {
             return response.data;
         })
@@ -34,12 +31,7 @@ export const submitRsvp = async (req, res) => {
             "msg": rsvp.msg,
             "_id": rsvp.phone,
             "lastSaved": new Date().toString()
-        }, {
-            headers: {
-                username: process.env.couchUser,
-                password: process.env.couchPassword
-            }
-        }).then((response) => {
+        }, { headers: { Authorization: AuthStr } }).then((response) => {
             res.status(200).send('Saved successfully!');
         })
             .catch((error) => {
@@ -56,12 +48,7 @@ export const submitRsvp = async (req, res) => {
             "_id": rsvp.phone,
             "_rev": oldRsvp._rev,
             "lastSaved": new Date().toString()
-        }, {
-            headers: {
-                username: process.env.couchUser,
-                password: process.env.couchPassword
-            }
-        })
+        }, { headers: { Authorization: AuthStr } })
             .then((response) => {
                 res.status(200).send('Updated Successfully!');
             })

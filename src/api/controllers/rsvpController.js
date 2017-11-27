@@ -2,7 +2,7 @@ import axios from 'axios';
 import CircularJSON from 'circular-json';
 
 const couchDbUrl = process.env.couchUrl;
-const AuthStr = 'Basic YXBwVXNlcjo3ODk2M1JyLjQ1MjA=';
+const AuthStr = `Basic ${process.env.authToken}`;
 
 const getRsvp = async (phone) => {
     let oldRsvpPromise = await axios.get(`${couchDbUrl}/${phone}`,

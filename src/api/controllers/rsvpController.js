@@ -1,14 +1,18 @@
 import axios from 'axios';
 import CircularJSON from 'circular-json';
 
-const couchDbUrl = "https://couchdb-1a7a13.smileupps.com/rsvp";
+const couchDbUrl = process.env.couchUrl;
 const auth = {
     username: process.env.couchUser,
     password: process.env.couchPassword
 }
 
 const getRsvp = async (phone) => {
-    let oldRsvpPromise = await axios.get(`${couchDbUrl}/${phone}`, auth)
+    let oldRsvpPromise = await axios.get(`${couchDbUrl}/${phone}`, {
+        headers: {
+            ...auth
+        }
+    })
         .then((response) => {
             return response.data;
         })
@@ -33,7 +37,11 @@ export const submitRsvp = async (req, res) => {
             "msg": rsvp.msg,
             "_id": rsvp.phone,
             "lastSaved": new Date().toString()
-        }, auth).then((response) => {
+        }, {
+            headers: {
+                ...auth
+            }
+        }).then((response) => {
             res.status(200).send('Saved successfully!');
         })
             .catch((error) => {
@@ -50,7 +58,11 @@ export const submitRsvp = async (req, res) => {
             "_id": rsvp.phone,
             "_rev": oldRsvp._rev,
             "lastSaved": new Date().toString()
-        }, auth)
+        }, {
+            headers: {
+                ...auth
+            }
+        })
             .then((response) => {
                 res.status(200).send('Updated Successfully!');
             })

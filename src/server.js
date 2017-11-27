@@ -19,5 +19,7 @@ routes(app);
 
 
 app.listen(port);
-
+console.log(process.env.couchUrl);
+console.log(process.env.couchUser);
+console.log(process.env.couchPassword);
 console.log('por-febour RESTful API server started on: ' + port);
